@@ -9,9 +9,10 @@ import pandas as pd
 
 from sklearn import preprocessing
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor, GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression, Ridge, SGDRegressor
 from sklearn.preprocessing import StandardScaler
 
 # Loading the data
@@ -27,7 +28,6 @@ df['Category'].unique()
 # Removing NaN values
 df = df[pd.notnull(df['Last Updated'])]
 df = df[pd.notnull(df['Content Rating'])]
-print(df.isnull().sum())
 
 # Encode app features
 le = preprocessing.LabelEncoder()
@@ -37,7 +37,7 @@ df['App'] = le.fit_transform(df['App'])
 category_list = df['Category'].unique().tolist()
 category_list = ['cat_' + word for word in category_list]
 df = pd.concat([df, pd.get_dummies(df['Category'], prefix='cat')], axis=1)
-print(len(category_list))
+
 # Encode genres features
 le = preprocessing.LabelEncoder()
 df['Genres'] = le.fit_transform(df['Genres'])
@@ -85,22 +85,26 @@ scaler = StandardScaler().fit(X_train)
 rescaled_X_train = scaler.transform(X_train)
 
 # Choose the best regressor
-#model = AdaBoostRegressor(random_state=0, n_estimators=1000)
-model = KNeighborsRegressor(n_neighbors=1)
+#model = AdaBoostRegressor(random_state=0, n_estimators=10)
 #model= LinearRegression()
+#model =Ridge()
+model=RandomForestRegressor(n_estimators=15)
+#model = DecisionTreeRegressor()
+
 
 model.fit(rescaled_X_train, y_train)
-accuracy1 = model.score(rescaled_X_train, y_train)
+train_accuracy = model.score(rescaled_X_train, y_train)
 
 rescaled_X_test = scaler.transform(X_test)
-diabetes_y_pred = model.predict(rescaled_X_test)
-print(diabetes_y_pred)
+y_pred = model.predict(rescaled_X_test)
+print(y_pred)
+
 def rmsle(y, y0):
     return np.sqrt(np.mean(np.square(np.log1p(y) - np.log1p(y0))))
-result = rmsle(y_test, diabetes_y_pred)
-print(result)
+result = rmsle(y_test, y_pred)
 print('Error Metrics: ' + str(result))
-accuracy = model.score(rescaled_X_test, y_test)
 
-print('Train Accuracy: ' + str(np.round(accuracy1*100, 2)) + '%')
-print('Validation Accuracy: ' + str(np.round(accuracy*100, 2)) + '%')
+test_accuracy = model.score(rescaled_X_test, y_test)
+
+print('Train Accuracy: ' + str(np.round(train_accuracy*100, 2)) + '%')
+print('Validation Accuracy: ' + str(np.round(test_accuracy*100, 2)) + '%')
