@@ -21,5 +21,5 @@
 - Split train and test data by scikit-learn.train_test_split (8:2 ratio)
 - Use scaling techniques to normalize the input data and avoid overfitting problem and increase the testing accuracy.
 # Model and Evaluation
-- Use the best regressor model for the dataset
+- Use the best regressor (Linear Regression, KNN Regressor, GradientBoostingRegressor) model for the dataset
 - Error metrics is root mean squared logarithmic error  formula:sum (abs(Log10(Actual) - Log10(Predicted))) => function: rmlse()
