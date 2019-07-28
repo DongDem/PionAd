@@ -19,7 +19,6 @@ df = pd.read_csv("GooglePlay_pion.csv")
 df.to_csv('original.csv')
 print(df.info())
 
-
 # Insert missing rating value
 df['Rating'] = df['Rating'].fillna(df['Rating'].median())
 
@@ -93,7 +92,6 @@ model = GradientBoostingRegressor(random_state=21, n_estimators=400)
 model.fit(rescaled_X_train, y_train)
 accuracy1 = model.score(rescaled_X_train, y_train)
 
-
 rescaled_X_test = scaler.transform(X_test)
 diabetes_y_pred = model.predict(rescaled_X_test)
 print(diabetes_y_pred)
@@ -101,6 +99,8 @@ def rmsle(y, y0):
     return np.sqrt(np.mean(np.square(np.log1p(y) - np.log1p(y0))))
 result = rmsle(y_test, diabetes_y_pred)
 print(result)
+print('Error Metrics: ' + str(result))
 accuracy = model.score(rescaled_X_test, y_test)
-print(accuracy1)
-print('Accuracy: ' + str(np.round(accuracy*100, 2)) + '%')
+
+print('Train Accuracy: ' + str(np.round(accuracy1*100, 2)) + '%')
+print('Validation Accuracy: ' + str(np.round(accuracy*100, 2)) + '%')
