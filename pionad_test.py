@@ -92,19 +92,15 @@ model=RandomForestRegressor(n_estimators=15)
 #model = DecisionTreeRegressor()
 
 
-<<<<<<< HEAD
 model.fit(rescaled_X_train, y_train)
 train_accuracy = model.score(rescaled_X_train, y_train)
 
-=======
->>>>>>> 6e5d147bae5faf1a02465a757c6a32ce59be5900
 rescaled_X_test = scaler.transform(X_test)
 y_pred = model.predict(rescaled_X_test)
 print(y_pred)
 
 def rmsle(y, y0):
     return np.sqrt(np.mean(np.square(np.log1p(y) - np.log1p(y0))))
-<<<<<<< HEAD
 result = rmsle(y_test, y_pred)
 print('Error Metrics: ' + str(result))
 
@@ -112,12 +108,3 @@ test_accuracy = model.score(rescaled_X_test, y_test)
 
 print('Train Accuracy: ' + str(np.round(train_accuracy*100, 2)) + '%')
 print('Validation Accuracy: ' + str(np.round(test_accuracy*100, 2)) + '%')
-=======
-result = rmsle(y_test, diabetes_y_pred)
-print(result)
-print('Error Metrics: ' + str(result))
-accuracy = model.score(rescaled_X_test, y_test)
-
-print('Train Accuracy: ' + str(np.round(accuracy1*100, 2)) + '%')
-print('Validation Accuracy: ' + str(np.round(accuracy*100, 2)) + '%')
->>>>>>> 6e5d147bae5faf1a02465a757c6a32ce59be5900
